@@ -15,6 +15,8 @@ let contactResultList = document.querySelector(".contact-result-list");
 
 let contactList = [];
 
+let arrayLocal = JSON.parse(window.localStorage.getItem("userName")) || [];
+
 contactItemCounter.textContent = ` Your item's count ${contactList.length}`;
 
 // ! Form submit event
@@ -75,6 +77,9 @@ contactForm.addEventListener("submit", (evt) => {
       contactEmptyBox.classList.remove("empty-box--on");
     }, 3000);
   }
+
+  addList(arrayLocal);
+  window.localStorage.setItem("userName", JSON.stringify(arrayLocal));
 
   addList();
 });
