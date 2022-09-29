@@ -13,9 +13,9 @@ let contactItemCounter = document.querySelector(".contact-item-counter");
 let contactResetdBtn = document.querySelector(".contact-reset-btn");
 let contactResultList = document.querySelector(".contact-result-list");
 
-let contactList = [];
+// let contactList = [];
 
-let arrayLocal = JSON.parse(window.localStorage.getItem("userName")) || [];
+let contactList = JSON.parse(window.localStorage.getItem("userName")) || [];
 
 contactItemCounter.textContent = ` Your item's count ${contactList.length}`;
 
@@ -78,10 +78,10 @@ contactForm.addEventListener("submit", (evt) => {
     }, 3000);
   }
 
-  addList(arrayLocal);
-  window.localStorage.setItem("userName", JSON.stringify(arrayLocal));
+  addList(contactList);
+  window.localStorage.setItem("userName", JSON.stringify(contactList));
 
-  addList();
+  //   addList();
 });
 
 // ! Function to add element from JavaScript
@@ -163,3 +163,4 @@ function addList() {
     });
   });
 }
+addList(contactList);
