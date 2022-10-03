@@ -41,9 +41,10 @@ contactForm.addEventListener("submit", (evt) => {
   );
   if (repeatNumber) {
     // ! This is setTimeOut code for empty box
-    contactEmptyBox.classList.add("d-none");
     contactSameNumberBox.classList.add("same-number-box--on");
+    contactEmptyBox.classList.add("d-none");
     setTimeout(() => {
+      contactEmptyBox.classList.remove("d-none");
       contactSameNumberBox.classList.remove("same-number-box--on");
     }, 3000);
   }
@@ -58,6 +59,7 @@ contactForm.addEventListener("submit", (evt) => {
 
     // ! This is setTimeOut code for success box
     contactSuccessBox.classList.add("success-box--on");
+    contactSameNumberBox.classList.remove("same-number-box--on");
     setTimeout(() => {
       contactSuccessBox.classList.remove("success-box--on");
     }, 2000);
@@ -71,7 +73,7 @@ contactForm.addEventListener("submit", (evt) => {
   } else {
     contactList.push();
     contactSuccessBox.classList.remove("success-box--on");
-    contactEmptyBox.classList.add("d-block", "empty-box--on");
+    contactEmptyBox.classList.add("empty-box--on");
     setTimeout(() => {
       contactEmptyBox.classList.remove("empty-box--on");
     }, 3000);
