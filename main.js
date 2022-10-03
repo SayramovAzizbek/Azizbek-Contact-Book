@@ -7,6 +7,7 @@ let contactRelationshipInput = document.querySelector(
 let contactTelInput = document.querySelector(".contact-tel-input");
 let contactSuccessBox = document.querySelector(".success-box");
 let contactEmptyBox = document.querySelector(".empty-box");
+let contactSameNumberBox = document.querySelector(".same-number-box");
 let contactSendBtn = document.querySelector(".contact-send-btn");
 let contactCanceldBtn = document.querySelector(".contact-delete-btn");
 let contactItemCounter = document.querySelector(".contact-item-counter");
@@ -28,30 +29,30 @@ contactForm.addEventListener("submit", (evt) => {
   let contactTelInputValue = contactTelInput.value;
 
   const contactObject = {
-    id: contactList.length,
+    id: contactList.length > 0 ? contactList[contactList.length - 1].id + 1 : 1,
     name: contactNameInputValue,
     relationship: contactRelationshipInputValue,
     number: contactTelInputValue,
   };
 
-  // ! Check for empty input for tel tye
-  //   if (typeof contactTelInput.value === "number") {
-  //     contactList.push(contactObject);
-  //   } else {
-  //     contactList.push();
-  //   }
-
-  // ! Check for empty Input
-
-  let objectNumber = contactList.findIndex(
-    (numberLists) => numberLists.number == contactObject.number
+  // ! Check for same number
+  let repeatNumber = contactList.find(
+    (repeatNumber) => repeatNumber.number == contactTelInputValue
   );
+  if (repeatNumber) {
+    // ! This is setTimeOut code for empty box
+    contactEmptyBox.classList.add("d-none");
+    contactSameNumberBox.classList.add("same-number-box--on");
+    setTimeout(() => {
+      contactSameNumberBox.classList.remove("same-number-box--on");
+    }, 3000);
+  }
 
   if (
     contactNameInputValue !== "" &&
     contactRelationshipInputValue !== "" &&
     contactTelInputValue !== "" &&
-    objectNumber
+    !repeatNumber
   ) {
     contactList.push(contactObject);
 
@@ -69,10 +70,8 @@ contactForm.addEventListener("submit", (evt) => {
     contactTelInput.value = "+";
   } else {
     contactList.push();
-
-    // ! This is setTimeOut code for empty box
     contactSuccessBox.classList.remove("success-box--on");
-    contactEmptyBox.classList.add("empty-box--on");
+    contactEmptyBox.classList.add("d-block", "empty-box--on");
     setTimeout(() => {
       contactEmptyBox.classList.remove("empty-box--on");
     }, 3000);
@@ -80,8 +79,6 @@ contactForm.addEventListener("submit", (evt) => {
 
   addList(contactList);
   window.localStorage.setItem("userName", JSON.stringify(contactList));
-
-  //   addList();
 });
 
 // ! Function to add element from JavaScript
@@ -100,22 +97,11 @@ function addList() {
     let contactDeleteItemBtn = document.createElement("button");
     contactNumberTextSpan.href = `tel:${item.number}`;
 
-    // ! Delete one by one
-    // contactDeleteItemBtn.dataset.deleteItemBtnID = item.id;
-    // contactDeleteItemBtn.addEventListener("click", (evt) => {
-    //   let deleteBtnID = evt.target.dataset.deleteItemBtnID;
-    //   let index = contactList.findIndex((item) => {
-    //     return item.id == deleteBtnID;
-    //   });
-    //   let deletedArray = contactList.splice(index, 1);
-    //   addList();
-    // });
-
     contactItem.classList.add("contact-result-item");
 
     // ! Contact Title Names
     contactIdText.textContent = `Contact ID: `;
-    contactIdTextSpan.textContent = ` ${item.id + 1}`;
+    contactIdTextSpan.textContent = ` ${item.id}`;
     contactIdText.classList.add("contact-result-main-text");
     contactNameText.textContent = `Name:`;
     contactNameTextSpan.textContent = ` ${item.name}`;
@@ -129,6 +115,7 @@ function addList() {
 
     // ! Contact Append Child
     contactResultList.appendChild(contactItem);
+    contactItem.dataset.id = item.id;
 
     contactItem.appendChild(contactIdText);
     contactIdText.appendChild(contactIdTextSpan);
@@ -150,17 +137,25 @@ function addList() {
     contactDeleteItemBtn.setAttribute("type", "button");
     contactDeleteItemBtn.classList.add("contact-delete-item-btn");
     contactDeleteItemBtn.textContent = `Delete`;
-
-    contactDeleteItemBtn.addEventListener("click", () => {
-      contactItem.classList.add("d-none");
-      contactItemCounter.textContent = ` Your item's count ${--contactList.length}`;
-    });
+    contactDeleteItemBtn.dataset.id = item.id;
 
     contactResetdBtn.addEventListener("click", (e) => {
       contactList = [];
       contactResultList.innerHTML = "";
       contactItemCounter.textContent = ` Your item's count ${contactList.length}`;
+      localStorage.clear();
     });
   });
 }
 addList(contactList);
+
+// ! Delete one by one
+contactResultList.addEventListener("click", function (evt) {
+  if (evt.target.matches(".contact-delete-item-btn")) {
+    let btnId = Number(evt.target.dataset.id);
+    let itemId = contactList.findIndex((item) => item.id === btnId);
+    contactList.splice(itemId, 1);
+    addList(contactList);
+    contactItemCounter.textContent = ` Your item's count ${contactList.length}`;
+  }
+});

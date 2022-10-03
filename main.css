@@ -42,7 +42,8 @@
 }
 
 .success-box,
-.empty-box {
+.empty-box,
+.same-number-box {
     position: absolute;
     bottom: 210px;
     left: 70px;
@@ -54,21 +55,23 @@
     transition: opacity .5s;
 }
 
-.empty-box {
+.empty-box,
+.same-number-box {
     width: 300px;
     left: 40px;
-    bottom: 195px;
     text-align: center;
     background-color: #f00;
 }
 
 .success-box--on,
-.empty-box--on {
+.empty-box--on,
+.same-number-box--on {
     opacity: 1;
 }
 
 .success-box-text,
-.empty-box-text {
+.empty-box-text,
+.same-number-text {
     margin: 0;
     color: #ffffff;
 }
