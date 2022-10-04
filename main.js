@@ -157,6 +157,7 @@ contactResultList.addEventListener("click", function (evt) {
     let btnId = Number(evt.target.dataset.id);
     let itemId = contactList.findIndex((item) => item.id === btnId);
     contactList.splice(itemId, 1);
+    window.localStorage.setItem("userName", JSON.stringify(contactList));
     addList(contactList);
     contactItemCounter.textContent = ` Your item's count ${contactList.length}`;
   }
